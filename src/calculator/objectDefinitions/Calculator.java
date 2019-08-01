@@ -1,13 +1,17 @@
 package calculator.objectDefinitions;
 
-import calculator.UnitMeasures;
+import calculator.operations.UnitMeasures;
+import calculator.operations.ValidationException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static calculator.operations.UnitMeasures.*;
+
 public class Calculator implements ICalculator {
     private String expression;
     private UnitMeasures resultUnitMeasure;
+    private Distance distance;
 
     public Calculator(String expression, UnitMeasures resultUnitMeasure){
         this.expression=expression;
@@ -30,59 +34,220 @@ public class Calculator implements ICalculator {
         this.resultUnitMeasure = resultUnitMeasure;
     }
 
-    @Override
-    public void add() {
 
-    }
 
-    @Override
-    public void substract() {
-
-    }
-
-    public double calculateDistance(){
-        List<Distance> listOfDistances=new ArrayList<>();
+    public double calculateDistance() throws ValidationException{
         double calculatedDistance=0;
-        double[] doubleDistance=getDistances(expression);
-        String[] stringUnitMeasure=getUnitMeasures(expression);
-        String[] stringOperators=getOperators(expression);
-        for (int i=0;i<doubleDistance.length;i++){
-            Distance distance=new Distance(doubleDistance[i],stringUnitMeasure[i]);
-            listOfDistances.add(distance);
+        List<Distance> listOfDistances=new ArrayList<>();
+        listOfDistances=breakUpExpressionInDistanceData(listOfDistances);
+        calculatedDistance+=listOfDistances.get(0).getDistanceValue();
+        List<String> stringOperators=getOperators(expression);
+        for(int i=0; i<stringOperators.size();i++){
+            switch (stringOperators.get(i)){
+                case "+":
+                    calculatedDistance+=listOfDistances.get(i+1).getDistanceValue();
+                    break;
+                case "-":
+                    calculatedDistance-=listOfDistances.get(i+1).getDistanceValue();
+                    break;
+            }
         }
-        transformDistancesToResultUM(listOfDistances,this.resultUnitMeasure);
         return calculatedDistance;
     }
 
-    private void transformDistancesToResultUM(List<Distance> listOfDistances, UnitMeasures resultUnitMeasure){
-        
-    }
+    private double transformDistancesToResultUM(String unitMeasureToBeTransformed, double doubleDistance)throws ValidationException{
+        UnitMeasures transformedUnitMeasure;
+        switch(resultUnitMeasure){
+            case MM:
+                doubleDistance=transformIntoMm(unitMeasureToBeTransformed, doubleDistance);
+                break;
+            case CM:
+                doubleDistance=transformIntoCm(unitMeasureToBeTransformed, doubleDistance);
+                break;
+            case DM:
+                doubleDistance=transformIntoDm(unitMeasureToBeTransformed, doubleDistance);
+                break;
+            case M:
+                doubleDistance=transformIntoM(unitMeasureToBeTransformed, doubleDistance);
+                break;
+            case KM:
+                doubleDistance=transformIntoKM(unitMeasureToBeTransformed, doubleDistance);
+                break;
+            default:
+                throw new ValidationException("UnitMeasure not valid!");
 
-    private double[] getDistances(String expression){
-        String separator="[cmk+\\-]+";
-        String[] stringDistances=expression.split(separator);
-        double[] doubleDistance=new double[stringDistances.length];
-        for (int i=0;i<stringDistances.length;i++){
-            doubleDistance[i]=Double.parseDouble(stringDistances[i]);
-            System.out.println(doubleDistance[i]);
         }
         return doubleDistance;
     }
 
-    private String[] getUnitMeasures(String expression){
+    private double transformIntoKM(String unitMeasureToBeTransformed, double doubleDistance) throws ValidationException{
+        UnitMeasures transformedUnitMeasure;
+        transformedUnitMeasure=KM;
+        switch(unitMeasureToBeTransformed) {
+            case "mm":
+                doubleDistance/=1000000;
+                break;
+            case "cm":
+                doubleDistance/=100000;
+                break;
+            case "dm":
+                doubleDistance/=10000;
+                break;
+            case "m":
+                doubleDistance/=1000;
+                break;
+            case "km":
+                break;
+            default:
+                throw new ValidationException("Unit measure not valid format (mm,cm,dm,m,km");
+        }
+        return doubleDistance;
+    }
+
+    private double transformIntoM(String unitMeasureToBeTransformed, double doubleDistance) throws ValidationException{
+        UnitMeasures transformedUnitMeasure;
+        transformedUnitMeasure=M;
+        switch(unitMeasureToBeTransformed) {
+            case "mm":
+                doubleDistance/=1000;
+                break;
+            case "cm":
+                doubleDistance/=100;
+                break;
+            case "dm":
+                doubleDistance/=10;
+                break;
+            case "m":
+                break;
+            case "km":
+                doubleDistance *= 1000;
+                break;
+            default:
+                throw new ValidationException("Unit measure not valid format (mm,cm,dm,m,km");
+        }
+        return doubleDistance;
+    }
+
+    private double transformIntoDm(String unitMeasureToBeTransformed, double doubleDistance) throws ValidationException{
+        UnitMeasures transformedUnitMeasure;
+        transformedUnitMeasure=DM;
+        switch(unitMeasureToBeTransformed) {
+            case "mm":
+                doubleDistance/=100;
+                break;
+            case "cm":
+                doubleDistance/=10;
+                break;
+            case "dm":
+                break;
+            case "m":
+                doubleDistance *= 10;
+                break;
+            case "km":
+                doubleDistance *= 10000;
+                break;
+            default:
+                throw new ValidationException("Unit measure not valid format (mm,cm,dm,m,km");
+        }
+        return doubleDistance;
+    }
+
+    private double transformIntoCm(String unitMeasureToBeTransformed, double doubleDistance) throws ValidationException{
+        UnitMeasures transformedUnitMeasure;
+        transformedUnitMeasure=CM;
+        switch(unitMeasureToBeTransformed) {
+            case "mm":
+                doubleDistance/=10;
+                break;
+            case "cm":
+                break;
+            case "dm":
+                doubleDistance *= 10;
+                break;
+            case "m":
+                doubleDistance *= 100;
+                break;
+            case "km":
+                doubleDistance *= 1000000;
+                break;
+            default:
+                throw new ValidationException("Unit measure not valid format (mm,cm,dm,m,km");
+        }
+        return doubleDistance;
+    }
+
+    private double transformIntoMm(String unitMeasureToBeTransformed, double doubleDistance) throws ValidationException{
+        UnitMeasures transformedUnitMeasure;
+        transformedUnitMeasure=MM;
+        switch(unitMeasureToBeTransformed) {
+            case "mm":
+                break;
+            case "cm":
+                doubleDistance *= 10;
+                break;
+            case "dm":
+                doubleDistance *= 100;
+                break;
+            case "m":
+                doubleDistance *= 1000;
+                break;
+            case "km":
+                doubleDistance *= 1000000;
+                break;
+            default:
+                throw new ValidationException("Unit measure not valid format (mm,cm,dm,m,km");
+        }
+        return doubleDistance;
+    }
+
+
+    private List<Distance> breakUpExpressionInDistanceData(List<Distance> listOfDistances) throws ValidationException{
+        List<Double> doubleDistance=getDistances(expression);
+        List<String> stringUnitMeasure=getUnitMeasures(expression);
+        System.out.println(" ");
+        System.out.println("-----------------------------------------------------------");
+        System.out.println("The introduced distances are: ");
+        for(int i=0; i<doubleDistance.size();i++){
+            System.out.print(doubleDistance.get(i)+" ");
+            System.out.println(stringUnitMeasure.get(i));
+        }
+        System.out.println("-----------------------------------------------------------");
+        System.out.println(" ");
+        for (int i=0;i<doubleDistance.size();i++){
+            distance=new Distance(transformDistancesToResultUM(stringUnitMeasure.get(i),doubleDistance.get(i)),resultUnitMeasure);
+            listOfDistances.add(distance);
+        }
+        return listOfDistances;
+    }
+
+    private List<Double> getDistances(String expression){
+        List<Double> doubleDistance=new ArrayList<>();
+        String separator="[cmk+\\-]+";
+        String[] stringDistances=expression.split(separator);
+        for (int i=0;i<stringDistances.length;i++){
+           if(!stringDistances[i].equals("")){
+               doubleDistance.add(Double.parseDouble(stringDistances[i]));
+           }
+        }
+        return doubleDistance;
+    }
+
+    private List<String> getUnitMeasures(String expression){
+        List<String> stringUnitMeasures=new ArrayList<>();
         String separator="[1234567890+\\-]+";
-        String[] stringUnitMeasures=expression.split(separator);
-        for (String i:stringUnitMeasures){
-            System.out.println(i);
+        String[] string=expression.split(separator);
+        for (int i=0;i<string.length;i++){
+            if (!string[i].equals("")){stringUnitMeasures.add(string[i]);};
         }
         return stringUnitMeasures;
     }
 
-    private String[] getOperators(String expression){
+    private List<String> getOperators(String expression){
+        List<String> stringOperators=new ArrayList<>();
         String separator="[1234567890mcdk]+";
-        String[] stringOperators=expression.split(separator);
-        for (String i:stringOperators){
-            System.out.println(i);
+        String[] string=expression.split(separator);
+        for (int i=0;i<string.length;i++){
+            if (!string[i].equals("")){stringOperators.add(string[i]);};
         }
         return stringOperators;
     }

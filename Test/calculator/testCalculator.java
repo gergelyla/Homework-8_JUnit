@@ -1,10 +1,12 @@
-package Calculator.Operations;
+package calculator;
 
-/*import org.junit.*;
+import org.junit.*;
 
-import static org.junit.Assert.*
+import org.junit.rules.ExpectedException;
+import static org.junit.Assert.*;
 
-public class BreakUpExpressionTest {
+public class testCalculator {
+
     @BeforeClass
     public static void beforeClass() {
         System.out.println("before class");
@@ -24,5 +26,4 @@ public class BreakUpExpressionTest {
     public void after() {
         System.out.println("after");
     }
-
-}*/
+}

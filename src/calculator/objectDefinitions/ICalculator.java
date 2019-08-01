@@ -1,6 +1,7 @@
 package calculator.objectDefinitions;
 
+import calculator.operations.ValidationException;
+
 public interface ICalculator {
-    void add();
-    void substract();
+    double calculateDistance() throws ValidationException;
 }

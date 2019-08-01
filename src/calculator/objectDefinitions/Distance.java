@@ -1,12 +1,15 @@
 package calculator.objectDefinitions;
 
-import calculator.UnitMeasures;
+import calculator.operations.UnitMeasures;
 
 public class Distance {
     private double distanceValue;
-    private String distanceUnitMeasure;
+    private UnitMeasures distanceUnitMeasure;
 
-    public Distance(double distanceValue,String distanceUnitMeasure){
+    public Distance(){
+    }
+
+    public Distance(double distanceValue,UnitMeasures distanceUnitMeasure){
         this.distanceValue=distanceValue;
         this.distanceUnitMeasure=distanceUnitMeasure;
     }
@@ -19,11 +22,18 @@ public class Distance {
         this.distanceValue = distanceValue;
     }
 
-    public String getDistanceUnitMeasure() {
+    public UnitMeasures getDistanceUnitMeasure() {
         return distanceUnitMeasure;
     }
 
-    public void setDistanceUnitMeasure(String distanceUnitMeasure) {
+    public void setDistanceUnitMeasure(UnitMeasures distanceUnitMeasure) {
         this.distanceUnitMeasure = distanceUnitMeasure;
+    }
+
+    @Override
+    public String toString() {
+        return "Distance: " +
+                distanceValue +
+                " " + distanceUnitMeasure;
     }
 }
