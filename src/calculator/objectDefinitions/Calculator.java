@@ -52,6 +52,7 @@ public class Calculator implements ICalculator {
                     break;
             }
         }
+        if(calculatedDistance<0){throw new ValidationException("Resulting distance negative!");}
         return calculatedDistance;
     }
 
@@ -218,7 +219,7 @@ public class Calculator implements ICalculator {
         return listOfDistances;
     }
 
-    private List<Double> getDistances(String expression){
+    private List<Double> getDistances(String expression)throws ValidationException{
         List<Double> doubleDistance=new ArrayList<>();
         String separator="[cmk+\\-]+";
         String[] stringDistances=expression.split(separator);

@@ -41,10 +41,10 @@ public class testCalculator {
         assertThat(calculator.calculateDistance(),is(32.88));
     }
 
-    @Test
-    public void testGetDistance(){
-        /*List<String> doubleDistance=new ArrayList<>();
-        String expression="33m-12cm";
-        calculator.getDistance(expression);*/
+    @Test(expected=ValidationException.class)
+    public void testCalculateDistanceWhenResultNegative()throws ValidationException{
+        calculator.setExpression("1m-200cm");
+        calculator.calculateDistance();
+        fail("resulting distance negative!");
     }
 }
