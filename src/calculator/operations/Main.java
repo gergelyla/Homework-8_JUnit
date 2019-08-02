@@ -19,7 +19,7 @@ public class Main {
     private static Calculator inputExpression() {
         System.out.print("Write a distance calculation expression (distance formats: mm/cm/dm/m/km): ");
         String expression=userInputString();
-        System.out.print("What unit measure should we use? mm/cm/dm/m/km): ");
+        System.out.print("What unit measure should we use? (mm/cm/dm/m/km): ");
         String uM=userInputString();
         UnitMeasures unitMeasure=M;
         switch (uM){

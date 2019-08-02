@@ -204,7 +204,6 @@ public class Calculator implements ICalculator {
     private List<Distance> breakUpExpressionInDistanceData(List<Distance> listOfDistances) throws ValidationException{
         List<Double> doubleDistance=getDistances(expression);
         List<String> stringUnitMeasure=getUnitMeasures(expression);
-        System.out.println(" ");
         System.out.println("-----------------------------------------------------------");
         System.out.println("The introduced distances are: ");
         for(int i=0; i<doubleDistance.size();i++){
@@ -212,7 +211,6 @@ public class Calculator implements ICalculator {
             System.out.println(stringUnitMeasure.get(i));
         }
         System.out.println("-----------------------------------------------------------");
-        System.out.println(" ");
         for (int i=0;i<doubleDistance.size();i++){
             distance=new Distance(transformDistancesToResultUM(stringUnitMeasure.get(i),doubleDistance.get(i)),resultUnitMeasure);
             listOfDistances.add(distance);
