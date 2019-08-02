@@ -6,12 +6,12 @@ public class Distance {
     private double distanceValue;
     private UnitMeasures distanceUnitMeasure;
 
-    public Distance(){
+    public Distance() {
     }
 
-    public Distance(double distanceValue,UnitMeasures distanceUnitMeasure){
-        this.distanceValue=distanceValue;
-        this.distanceUnitMeasure=distanceUnitMeasure;
+    public Distance(double distanceValue, UnitMeasures distanceUnitMeasure) {
+        this.distanceValue = distanceValue;
+        this.distanceUnitMeasure = distanceUnitMeasure;
     }
 
     public double getDistanceValue() {
